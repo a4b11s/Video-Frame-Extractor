@@ -1,4 +1,3 @@
-```markdown
 # Video Frame Extractor
 
 A simple application designed to extract frames from videos.
@@ -49,4 +48,3 @@ This project is open-source and available under the MIT License.
 ## Authors
 
 - Artem Bazyl <a4b11s@gmail.com>
-```
