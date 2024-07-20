@@ -1,3 +1,5 @@
+[![wakatime](https://wakatime.com/badge/user/018ed2aa-e4fd-4336-bab8-464a091e41b7/project/9370eddc-4f98-44c7-bdb3-2abb2404410c.svg)](https://wakatime.com/badge/user/018ed2aa-e4fd-4336-bab8-464a091e41b7/project/9370eddc-4f98-44c7-bdb3-2abb2404410c)
+
 # Video Frame Extractor
 
 A simple application designed to extract frames from videos.
