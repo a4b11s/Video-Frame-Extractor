@@ -33,7 +33,13 @@ import click
     type=str,
     help="Name of the subdirectory to save the frames. If not provided, the name of the video file will be used.",
 )
-def extract_frames(video_file, output_dir, frame_rate, subdir, subdir_name):
+@click.option(
+    "--verbose",
+    "-v",
+    is_flag=True,
+    help="Print verbose output.",
+)
+def extract_frames(video_file, output_dir, frame_rate, subdir, subdir_name, verbose):
     """
     Extract frames from a video file and save them as images in a directory.
     """
@@ -45,7 +51,7 @@ def extract_frames(video_file, output_dir, frame_rate, subdir, subdir_name):
             subdir_name = os.path.splitext(os.path.basename(video_file))[0]
         output_dir = os.path.join(output_dir, subdir_name)
     
-    video_framer = VideoFramer(video_file, output_dir, frame_rate)
+    video_framer = VideoFramer(video_file, output_dir, frame_rate, verbose)
     
     video_framer.extract_frames()
     
