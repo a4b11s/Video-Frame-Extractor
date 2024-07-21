@@ -4,6 +4,7 @@ import unittest
 import tempfile
 
 from v2p.video_framer import VideoFramer
+from unittest.mock import patch, MagicMock
 
 
 class TestVideoFramer(unittest.TestCase):
@@ -31,6 +32,15 @@ class TestVideoFramer(unittest.TestCase):
         self.framer.extract_frames()
         frame_count = self.framer._frame_count()
         self.assertEqual(len(os.listdir(self.frame_dir)), frame_count)
+
+    @patch("v2p.video_framer.tqdm.tqdm")
+    def test_verbose(self, mock_tqdm):
+        self.framer.verbose = True
+        self.framer.extract_frames()
+        mock_tqdm.assert_called()
+        update_mock = mock_tqdm.return_value.update
+
+        self.assertEqual(update_mock.call_count, self.framer._frame_count())
 
     def test_extract_frame_calling_with_different_frame_rate(self):
         method_callded_times = 0
