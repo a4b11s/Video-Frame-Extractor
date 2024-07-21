@@ -1,9 +1,10 @@
 import os
 import cv2
+import tqdm
 
 
 class VideoFramer(object):
-    def __init__(self, video_path, frame_dir, frame_rate=1):
+    def __init__(self, video_path, frame_dir, frame_rate=1, verbose=False):
         self.video_path = video_path
         self.frame_dir = frame_dir
         self.frame_rate = frame_rate
@@ -12,12 +13,15 @@ class VideoFramer(object):
             raise FileNotFoundError(f"Video file not found: {self.video_path}")
 
         self._frame_dir()
+        
+        self.verbose = verbose
 
     def extract_frames(self):
         video = cv2.VideoCapture(self.video_path)
         self._on_extracting_start()
         frame_count = 0
         while True:
+            self._on_iteration_start()
             ret, frame = video.read()
             if not ret:
                 self._on_extracting_end()
@@ -25,6 +29,7 @@ class VideoFramer(object):
             if frame_count % self.frame_rate == 0:
                 self._extract_frame(frame, frame_count)
             frame_count += 1
+            self._on_iteration_end()
         video.release()
         cv2.destroyAllWindows()
 
@@ -49,13 +54,26 @@ class VideoFramer(object):
         return frame_count
 
     def _on_extracting_start(self):
-        print(f"Extracting frames from {self.video_path}...")
+        if self.verbose:
+            self.pbar = tqdm.tqdm(total=self._frame_count(), unit="frames")
 
     def _on_extracting_end(self):
-        print(f"Frames extracted to {self.frame_dir}")
+        pass
 
     def _on_frame_start(self, frame_count):
-        print(f"Extracting frame {frame_count}...")
+        pass
 
     def _on_frame_end(self, frame_count):
-        print(f"Frame {frame_count} extracted.")
+        pass
+
+    def _on_iteration_start(self):
+        pass
+    
+    def _on_iteration_end(self):
+        if hasattr(self, "pbar") and self.verbose:
+            self.pbar.update(1)
+
+    def __del__(self):
+        if hasattr(self, "pbar"):
+            self.pbar.close()
+        cv2.destroyAllWindows()
