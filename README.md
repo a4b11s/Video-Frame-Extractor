@@ -13,6 +13,7 @@ This application provides a straightforward way to extract frames from video fil
 - Extract frames at specified intervals
 - Support for multiple video formats
 - Easy to use command-line interface
+- Option to compress extracted frames into a zip file or save them in a folder
 
 ## Installation
 
