@@ -1,8 +1,9 @@
-import unittest
 import os
-import cv2
-from v2p.video_framer import VideoFramer
+import math
+import unittest
 import tempfile
+
+from v2p.video_framer import VideoFramer
 
 
 class TestVideoFramer(unittest.TestCase):
@@ -30,6 +31,28 @@ class TestVideoFramer(unittest.TestCase):
         self.framer.extract_frames()
         frame_count = self.framer._frame_count()
         self.assertEqual(len(os.listdir(self.frame_dir)), frame_count)
+
+    def test_extract_frame_calling_with_different_frame_rate(self):
+        method_callded_times = 0
+
+        def mock_extract_frame(*_, **__):
+            nonlocal method_callded_times
+            method_callded_times += 1
+
+        self.framer._extract_frame = mock_extract_frame
+
+        frame_rates = [1, 2, 3, 4, 5]
+
+        for frame_rate in frame_rates:
+            self.framer.frame_rate = frame_rate
+
+            self.framer.extract_frames()
+
+            expected_calls = math.ceil(self.framer._frame_count() / frame_rate)
+
+            self.assertEqual(method_callded_times, expected_calls)
+
+            method_callded_times = 0
 
     def test_calling_callbacks(self):
         # Mock the callbacks
